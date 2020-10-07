@@ -45,8 +45,11 @@ def make_category_filling_rate(data, to_label, sort=True):
         return synset, value
 
 
-def make_graph(data, method):
-    label, value = make_category_filling_rate(data, to_label=True)
+def make_graph(data, filename):
+    if isinstance(data, dict):
+        label, value = make_category_filling_rate(data, to_label=True)
+    elif isinstance(data, list):
+        label, value = data
     plt.rcParams["font.size"] = 5
     plt.xlim(0, 1)
     plt.barh(label, value, height=0.5)
@@ -57,12 +60,12 @@ def make_graph(data, method):
     for x in [0, 0.2, 0.4, 0.6, 0.8, 1.0]:
         plt.axvline(x=x, linewidth=0.5, color='black')
     # plt.show()
-    plt.savefig('filling_rate_%s.png' % method, format='png', dpi=200)
+    plt.savefig(filename, format='png', dpi=200)
     plt.close()
 
 
 def filter_filling_rate(
-        min_value=0., max_value=1., method='convex_hull', to_label=False):
+        min_value=0., max_value=1., method='convex_hull', to_label=False, sort=False):
     """Filter categories by filling rate
 
     Parameters
@@ -81,7 +84,7 @@ def filter_filling_rate(
     filtered_synset : list[float]
     filtered_value : list[float]
     """
-    synset, value = category_filling_rate(method, to_label)
+    synset, value = category_filling_rate(method, to_label, sort)
     filtered_value = []
     filtered_synset = []
     for i, v in enumerate(value):
@@ -133,5 +136,5 @@ if __name__ == '__main__':
     save_json('shapenet_filling_rate_convex_hull.json', data)
     save_json('shapenet_filling_rate_bounding_box.json', data_box)
 
-    make_graph(data, 'convex_hull')
-    make_graph(data_box, 'bounding_box')
+    make_graph(data, 'filling_rate_convex_hull.png')
+    make_graph(data_box, 'filling_rate_bounding_box.png')
