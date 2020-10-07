@@ -6,8 +6,10 @@ import trimesh
 from tqdm import tqdm
 
 from shapenet_utils.shapenet_synset_dict import synset_to_label
-from shapenet_utils.functions import save_json
+from shapenet_utils.file_io import save_json
 
+# from shapenet_utils.data import category_filling_rate
+# from shapenet_utils import category_filling_rate
 
 def make_category_filling_rate(data, to_label, sort=True):
     synset = []

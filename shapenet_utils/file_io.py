@@ -1,7 +1,5 @@
 import json
 
-# from shapenet_utils.data import category_filling_rate
-
 
 def save_json(save_file, data, sort_key=True):
     """Save json
