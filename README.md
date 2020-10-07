@@ -1,7 +1,6 @@
 # shapenet_utils
-![filling_rate_convex_hull](https://user-images.githubusercontent.com/39142679/95360572-84f47880-0906-11eb-9455-b6abbbd580c1.png)
 
-### install
+### Install
 ```
 pip install -e .
 ```
@@ -126,3 +125,5 @@ Out[3]: value
  0.20992030585085217,
  0.1868298955127837]
  ```
+
+ <img src="https://user-images.githubusercontent.com/39142679/95360079-e0723680-0905-11eb-99fc-d99953504dfe.png" height="600">
