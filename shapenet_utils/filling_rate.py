@@ -61,34 +61,34 @@ def make_graph(data, method):
     plt.close()
 
 
-# def filter_filling_rate(
-#         min_value=0., max_value=1., method='convex_hull', to_label=False):
-#     """Filter categories by filling rate
+def filter_filling_rate(
+        min_value=0., max_value=1., method='convex_hull', to_label=False):
+    """Filter categories by filling rate
 
-#     Parameters
-#     ----------
-#     min_value : float, optional
-#         min filling rate value, by default 0.
-#     max_value : float, optional
-#         max filling rate value, by default 1.
-#     method : str, optional
-#         'convex_hull' or 'bounding_box', by default 'convex_hull'
-#     to_label : bool, optional
-#         If True, convert synset to label, by default False
+    Parameters
+    ----------
+    min_value : float, optional
+        min filling rate value, by default 0.
+    max_value : float, optional
+        max filling rate value, by default 1.
+    method : str, optional
+        'convex_hull' or 'bounding_box', by default 'convex_hull'
+    to_label : bool, optional
+        If True, convert synset to label, by default False
 
-#     Returns
-#     -------
-#     filtered_synset : list[float]
-#     filtered_value : list[float]
-#     """
-#     synset, value = category_filling_rate(method, to_label)
-#     filtered_value = []
-#     filtered_synset = []
-#     for i, v in enumerate(value):
-#         if min_value < v < max_value:
-#             filtered_value.appned(v)
-#             filtered_synset.appned(synset[i])
-#     return filtered_synset, filtered_value
+    Returns
+    -------
+    filtered_synset : list[float]
+    filtered_value : list[float]
+    """
+    synset, value = category_filling_rate(method, to_label)
+    filtered_value = []
+    filtered_synset = []
+    for i, v in enumerate(value):
+        if min_value < v < max_value:
+            filtered_value.append(v)
+            filtered_synset.append(synset[i])
+    return filtered_synset, filtered_value
 
 
 if __name__ == '__main__':
