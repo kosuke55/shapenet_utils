@@ -1,3 +1,4 @@
+import os.path as osp
 from pathlib import Path
 
 import numpy as np
@@ -6,10 +7,23 @@ import trimesh
 from tqdm import tqdm
 
 from shapenet_utils.shapenet_synset_dict import synset_to_label
-from shapenet_utils.file_io import save_json
+from shapenet_utils.file_io import load_json, save_json
+from shapenet_utils.data import data_dir
 
-# from shapenet_utils.data import category_filling_rate
-# from shapenet_utils import category_filling_rate
+
+def filling_rate(method='convex_hull'):
+    if method == 'convex_hull':
+        return load_json(
+            osp.join(data_dir, 'shapenet_filling_rate_convex_hull.json'))
+    elif method == 'bounding_box':
+        return load_json(
+            osp.join(data_dir, 'shapenet_filling_rate_bounding_box.json'))
+
+
+def category_filling_rate(method='convex_hull', to_label=False, sort=False):
+    data = filling_rate(method)
+    return make_category_filling_rate(data, to_label, sort)
+
 
 def make_category_filling_rate(data, to_label, sort=True):
     synset = []
@@ -45,6 +59,36 @@ def make_graph(data, method):
     # plt.show()
     plt.savefig('filling_rate_%s.png' % method, format='png', dpi=200)
     plt.close()
+
+
+# def filter_filling_rate(
+#         min_value=0., max_value=1., method='convex_hull', to_label=False):
+#     """Filter categories by filling rate
+
+#     Parameters
+#     ----------
+#     min_value : float, optional
+#         min filling rate value, by default 0.
+#     max_value : float, optional
+#         max filling rate value, by default 1.
+#     method : str, optional
+#         'convex_hull' or 'bounding_box', by default 'convex_hull'
+#     to_label : bool, optional
+#         If True, convert synset to label, by default False
+
+#     Returns
+#     -------
+#     filtered_synset : list[float]
+#     filtered_value : list[float]
+#     """
+#     synset, value = category_filling_rate(method, to_label)
+#     filtered_value = []
+#     filtered_synset = []
+#     for i, v in enumerate(value):
+#         if min_value < v < max_value:
+#             filtered_value.appned(v)
+#             filtered_synset.appned(synset[i])
+#     return filtered_synset, filtered_value
 
 
 if __name__ == '__main__':
