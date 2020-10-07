@@ -43,7 +43,7 @@ synset_to_label = {
     '03991062': 'pot',
     '03948459': 'pistol',
     '04004475': 'printer',
-    '04074963': 'remote',
+    '04074963': 'remote control',
     '04090263': 'rifle',
     '04099429': 'rocket',
     '04225987': 'skateboard',

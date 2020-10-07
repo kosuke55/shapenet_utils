@@ -1,13 +1,26 @@
 from __future__ import print_function
 
+import os.path as osp
 from setuptools import find_packages
 from setuptools import setup
 
 
 version = "0.0.1"
 
+
+def listup_package_data():
+    data_files = []
+    for root, _, files in os.walk('shapent_utils/data'):
+        for filename in files:
+            data_files.append(
+                osp.join(
+                    root[len('shapent_utils/'):],
+                    filename))
+    return data_files
+
+
 setup_requires = []
-install_requires = ['pyperclip', 'selenium', 'timeout-decorator', 'wordninja']
+install_requires = ['trimesh']
 
 setup(
     name="shapenet_utils",

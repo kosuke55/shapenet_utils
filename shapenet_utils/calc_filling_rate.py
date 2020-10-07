@@ -9,7 +9,7 @@ from shapenet_utils.shapenet_synset_dict import synset_to_label
 from shapenet_utils.functions import save_json
 
 
-def make_category_filling_rate(data, to_label):
+def make_category_filling_rate(data, to_label, sort=True):
     synset = []
     value = []
     for d in [[k, v] for k, v in data.items()]:
@@ -18,6 +18,10 @@ def make_category_filling_rate(data, to_label):
         for _d in [[k, v] for k, v in d[1].items()]:
             value_list.append(_d[1])
         value.append(np.mean(value_list))
+    if sort:
+        idx = np.argsort(np.array(value)).tolist()
+        value.sort()
+        synset = [synset[i] for i in idx]
     if to_label:
         label = [synset_to_label[s] for s in synset]
         return label, value
@@ -27,14 +31,18 @@ def make_category_filling_rate(data, to_label):
 
 def make_graph(data, method):
     label, value = make_category_filling_rate(data, to_label=True)
-    plt.bar(label, value, width=0.5)
-    plt.title('filling rate %s' % method.replace('_', ' '))
-    plt.xlabel('category')
-    plt.xticks(rotation=90)
-    plt.ylabel('filling rate')
+    plt.rcParams["font.size"] = 5
+    plt.xlim(0, 1)
+    plt.barh(label, value, height=0.5)
+    # plt.title('filling rate %s' % method.replace('_', ' '))
+    plt.xlabel('filling rate')
+    plt.ylabel('category')
     plt.tight_layout()
+    for x in [0, 0.2, 0.4, 0.6, 0.8, 1.0]:
+        plt.axvline(x=x, linewidth=0.5, color='black')
     # plt.show()
-    plt.savefig('filling_rate_%s.png' % method, format='png', dpi=300)
+    plt.savefig('filling_rate_%s.png' % method, format='png', dpi=200)
+    plt.close()
 
 
 if __name__ == '__main__':
@@ -67,7 +75,10 @@ if __name__ == '__main__':
             voxel = mesh.voxelized(0.01)
 
         filling_rate_box = voxel.volume / mesh.bounding_box_oriented.volume
+        filling_rate_box = 1. if filling_rate_box > 1. else filling_rate_box
         filling_rate_convex_hull = voxel.volume / mesh.convex_hull.volume
+        filling_rate_convex_hull \
+            = 1. if filling_rate_convex_hull > 1. else filling_rate_convex_hull
         print(filling_rate_convex_hull)
         data_id = str(path.parent.parent.name)
         data_box[category][data_id] = filling_rate_box
