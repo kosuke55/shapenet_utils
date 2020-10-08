@@ -65,7 +65,11 @@ def make_graph(data, filename):
 
 
 def filter_filling_rate(
-        min_value=0., max_value=1., method='convex_hull', to_label=False, sort=False):
+        min_value=0.,
+        max_value=1.,
+        method='convex_hull',
+        to_label=False,
+        sort=False):
     """Filter categories by filling rate
 
     Parameters
