@@ -55,14 +55,20 @@ def manipulation_synset():
     return manipulation_synset
 
 
-def filtering_result():
+def filtering_result(task_type='hanging'):
+    if task_type == 'hanging':
+        filename = 'filtering_result.json'
+    elif task_type == 'pouring':
+        filename = 'filtering_result_pouring.json'
+    else:
+        raise ValueError('task_type should "be hanging" or "pouring"')
     return load_json(
-        osp.join(data_dir, 'filtering_result.json'))
+        osp.join(data_dir, filename))
 
 
-def hanging_points_dict(to_label=False, post_process=None):
+def points_dict(task_type, to_label=False, post_process=None):
     _hanging_points_dict = {}
-    _filtering_result = filtering_result()
+    _filtering_result = filtering_result(task_type=task_type)
     for key in _filtering_result:
         category = key.split('_')[0]
         if to_label:
@@ -85,17 +91,52 @@ def hanging_points_dict(to_label=False, post_process=None):
     return _hanging_points_dict
 
 
-def hanging_synset(thresh=0, manipulation=True, post_process='median'):
-    _hanging_synset = []
-    _hanging_points_dict = hanging_points_dict(post_process=post_process)
-    for synset in _hanging_points_dict:
-        if _hanging_points_dict[synset] > thresh:
-            _hanging_synset.append(synset)
+def hanging_points_dict(to_label=False, post_process=None):
+    return points_dict(task_type='hanging',
+                       to_label=to_label, post_process=post_process)
+
+
+def pouring_points_dict(to_label=False, post_process=None):
+    return points_dict(task_type='pouring',
+                       to_label=to_label, post_process=post_process)
+
+
+def function_synset(task_type, thresh=0,
+                    manipulation=True, post_process='median'):
+    _function_synset = []
+    if task_type == 'hanginge':
+        _function_points_dict = hanging_points_dict(post_process=post_process)
+    elif task_type == 'pouring':
+        _function_points_dict = pouring_points_dict(post_process=post_process)
+    else:
+        raise ValueError('task_type should be "hanging" or "pouring"')
+
+    for synset in _function_points_dict:
+        if _function_points_dict[synset] > thresh:
+            _function_synset.append(synset)
     if manipulation:
-        _hanging_synset = [
-            s for s in _hanging_synset if s in manipulation_synset()]
-    return _hanging_synset
+        _function_synset = [
+            s for s in _function_synset if s in manipulation_synset()]
+    return _function_synset
+
+
+def hanging_synset(thresh=0, manipulation=True,
+                   post_process='median'):
+    return function_synset(task_type='hanging', thresh=thresh,
+                           manipulation=manipulation,
+                           post_process=post_process)
+
+
+def pouring_synset(thresh=0, manipulation=True,
+                   post_process='median'):
+    return function_synset(task_type='pouring', thresh=thresh,
+                           manipulation=manipulation,
+                           post_process=post_process)
 
 
 def hanging_label(thresh=0, manipulation=True):
     return [synset_to_label[s] for s in hanging_synset(thresh, manipulation)]
+
+
+def pouring_label(thresh=0, manipulation=True):
+    return [synset_to_label[s] for s in pouring_synset(thresh, manipulation)]
