@@ -55,7 +55,10 @@ def manipulation_synset():
     return manipulation_synset
 
 
-def filtering_result(task_type='hanging'):
+def filtering_result(task_type='hanging', file_path=None):
+    if file_path is not None:
+        return load_json(file_path)
+
     if task_type == 'hanging':
         filename = 'filtering_result.json'
     elif task_type == 'pouring':
@@ -66,9 +69,11 @@ def filtering_result(task_type='hanging'):
         osp.join(data_dir, filename))
 
 
-def points_dict(task_type, to_label=False, post_process=None):
+def points_dict(task_type='hanging_points', file_path=None,
+                to_label=False, post_process=None):
     _hanging_points_dict = {}
-    _filtering_result = filtering_result(task_type=task_type)
+    _filtering_result = filtering_result(
+        task_type=task_type, file_path=file_path)
     for key in _filtering_result:
         category = key.split('_')[0]
         if to_label:
