@@ -37,7 +37,6 @@ def manipulation_label():
          'knife',
          'lamp',
          'laptop',
-         'loudspeaker',
          'microphone',
          'mug',
          'pillow',
