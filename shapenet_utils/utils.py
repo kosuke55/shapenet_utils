@@ -109,7 +109,7 @@ def pouring_points_dict(to_label=False, post_process=None):
 def function_synset(task_type, thresh=0,
                     manipulation=True, post_process='median'):
     _function_synset = []
-    if task_type == 'hanginge':
+    if task_type == 'hanging':
         _function_points_dict = hanging_points_dict(post_process=post_process)
     elif task_type == 'pouring':
         _function_points_dict = pouring_points_dict(post_process=post_process)
